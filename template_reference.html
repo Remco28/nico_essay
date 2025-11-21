@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essay Critique Template Reference</title>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .essay-container {
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-top: 30px;
+        }
+
+        /* Paragraph Styles */
+        .paragraph {
+            margin-bottom: 30px;
+            padding: 15px;
+            border-left: 4px solid #ecf0f1;
+        }
+
+        /* Comment Box Styles */
+        .teacher-comment {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 15px 0;
+            font-style: italic;
+            color: #856404;
+        }
+        .teacher-comment::before {
+            content: "✏️ Teacher Comment: ";
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        .strength {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 10px;
+            margin: 15px 0;
+            color: #155724;
+        }
+        .strength::before {
+            content: "✓ Strength: ";
+            font-weight: bold;
+        }
+
+        .suggestion {
+            background-color: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 10px;
+            margin: 15px 0;
+            color: #0c5460;
+        }
+        .suggestion::before {
+            content: "💡 Suggestion: ";
+            font-weight: bold;
+        }
+
+        /* Inline Markup Styles */
+        .inline-comment {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+            cursor: help;
+            position: relative;
+        }
+
+        strike {
+            color: #dc3545;
+            text-decoration: line-through;
+        }
+
+        .replacement {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        /* Grade Box Styles */
+        .grade-box {
+            background-color: #e7f3ff;
+            border: 2px solid #3498db;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 5px;
+        }
+
+        .grade-box h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .criteria {
+            margin: 10px 0;
+        }
+
+        .criteria strong {
+            color: #2c3e50;
+        }
+
+        /* List Styles */
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="essay-container">
+        <!-- HEADER SECTION -->
+        <h1>Essay Critique: [Essay Title/Topic]</h1>
+
+        <!-- OVERALL ASSESSMENT -->
+        <div class="grade-box">
+            <h2>Overall Assessment</h2>
+            <div class="criteria"><strong>Thesis & Focus:</strong> [Grade] ([Comment])</div>
+            <div class="criteria"><strong>Evidence & Analysis:</strong> [Grade] ([Comment])</div>
+            <div class="criteria"><strong>Organization:</strong> [Grade] ([Comment])</div>
+            <div class="criteria"><strong>Writing Mechanics:</strong> [Grade] ([Comment])</div>
+            <div class="criteria"><strong>Overall Grade:</strong> [Grade] ([Score]/100)</div>
+        </div>
+
+        <!-- ESSAY SECTIONS -->
+        <h2>Introduction</h2>
+        <div class="paragraph">
+            <p>
+                <strike>Original text that needs revision</strike>
+                <span class="replacement">Suggested replacement text</span>
+                Regular text continues here.
+                <span class="inline-comment">Highlighted phrase needing attention</span>
+                More text...
+            </p>
+        </div>
+
+        <!-- Comment boxes follow each section -->
+        <div class="teacher-comment">
+            General observations about this section. Explain what's working or not working.
+        </div>
+
+        <div class="strength">
+            Highlight specific things the student did well in this section.
+        </div>
+
+        <div class="suggestion">
+            Provide specific, actionable advice for how to improve this section.
+        </div>
+
+        <!-- BODY PARAGRAPHS -->
+        <h2>Body Paragraph 1: [Topic]</h2>
+        <div class="paragraph">
+            <p>[Essay text with inline markup]</p>
+        </div>
+
+        <div class="strength">
+            [Positive feedback]
+        </div>
+
+        <div class="teacher-comment">
+            [General comment]
+        </div>
+
+        <div class="suggestion">
+            [Specific suggestion]
+        </div>
+
+        <!-- Repeat for each body paragraph -->
+
+        <!-- CONCLUSION -->
+        <h2>Conclusion</h2>
+        <div class="paragraph">
+            <p>[Essay text] or indicate if missing</p>
+        </div>
+
+        <div class="teacher-comment">
+            [Feedback on conclusion or note that it's missing]
+        </div>
+
+        <!-- OVERALL FEEDBACK -->
+        <h2>Overall Feedback</h2>
+
+        <div class="strength">
+            <strong>What You're Doing Well:</strong>
+            <ul>
+                <li>Specific strength 1</li>
+                <li>Specific strength 2</li>
+                <li>Specific strength 3</li>
+            </ul>
+        </div>
+
+        <div class="suggestion">
+            <strong>Areas for Improvement:</strong>
+            <ul>
+                <li><strong>Main issue 1:</strong> Explanation and how to fix</li>
+                <li><strong>Main issue 2:</strong> Explanation and how to fix</li>
+                <li><strong>Main issue 3:</strong> Explanation and how to fix</li>
+            </ul>
+        </div>
+
+        <!-- FINAL THOUGHTS -->
+        <div class="grade-box">
+            <h2>Final Thoughts</h2>
+            <p>
+                <strong>[Overall assessment in one sentence]</strong>
+                [Paragraph summarizing the essay's strengths, explaining the grade,
+                and providing encouragement for revision.]
+            </p>
+            <p>
+                <strong>Next Steps:</strong>
+                [Specific, prioritized steps for revision - what should they tackle first?]
+            </p>
+        </div>
+
+    </div>
+
+    <!-- TEMPLATE USAGE NOTES (Remove this section in actual critiques) -->
+    <div style="background: #f8f9fa; padding: 20px; margin-top: 40px; border: 2px dashed #6c757d;">
+        <h2>Template Usage Notes (For AI Agents)</h2>
+        <h3>When to Use Each Comment Type:</h3>
+        <ul>
+            <li><strong>Strength (Green):</strong> Specific things done well - be genuine and precise</li>
+            <li><strong>Teacher Comment (Yellow):</strong> Explanations, observations, teaching moments</li>
+            <li><strong>Suggestion (Blue):</strong> Actionable advice - tell them HOW to improve</li>
+        </ul>
+
+        <h3>Inline Markup Guidelines:</h3>
+        <ul>
+            <li><strong>Strikethrough + Replacement:</strong> Use for sentences that need rewriting</li>
+            <li><strong>Inline Comment (Yellow highlight):</strong> Draw attention to phrases without full rewrite</li>
+            <li><strong>Don't overdo it:</strong> Focus on major issues, not every tiny error</li>
+        </ul>
+
+        <h3>Structure Rules:</h3>
+        <ul>
+            <li>Always include the Overall Assessment grade box at the top</li>
+            <li>Break critique into sections matching the essay structure</li>
+            <li>Every section should have at least one comment box</li>
+            <li>Balance positive and constructive feedback</li>
+            <li>End with Final Thoughts grade box including next steps</li>
+        </ul>
+
+        <h3>Tone Reminders:</h3>
+        <ul>
+            <li>Write as an encouraging teacher, not a critic</li>
+            <li>Use "you" and "your" to speak directly to the student</li>
+            <li>Explain the "why" behind feedback</li>
+            <li>Frame issues as opportunities to improve</li>
+            <li>Celebrate genuine strengths enthusiastically</li>
+        </ul>
+    </div>
+
+</body>
+</html>
