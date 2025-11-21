@@ -110,6 +110,8 @@ The HTML critique includes:
 
 See `example/essay1.md` and `example/essay1_critique.html` for a complete example of an 8th-grade essay and its critique.
 
+You can also browse all available critiques on the [**GitHub Pages site**](https://[your-username].github.io/[repo-name]/) which is automatically updated whenever new critiques are added.
+
 ## 🤝 Contributing
 
 Found a bug? Have suggestions for improvement? Feel free to open an issue or submit a pull request!
@@ -117,6 +119,38 @@ Found a bug? Have suggestions for improvement? Feel free to open an issue or sub
 ## 📄 License
 
 This project is open source and available under the MIT License.
+
+## 🤖 How the Auto-Index Works (GitHub Actions)
+
+This repository uses **GitHub Actions** to automatically maintain an index of all essay critiques. Here's how it works:
+
+### What is GitHub Actions?
+GitHub Actions is GitHub's built-in automation tool. Think of it as a robot that watches your repository and performs tasks automatically when certain events happen (like when you push new code).
+
+### How It Works Here
+1. **You push changes** to the repository (add/remove critique files)
+2. **GitHub Action triggers** automatically
+3. **Python script scans** the repository for all `*_critique.html` files
+4. **Index.html is generated** with an organized list of all critiques
+5. **Changes are committed** back to the repository automatically
+
+### What Gets Tracked
+- All files ending in `_critique.html` throughout the repository
+- Essay titles (extracted from the HTML)
+- Grades (if present in the critique)
+- Last modified dates
+- Organized by folder/project
+
+### Zero Maintenance Required!
+Once set up, you never need to manually update the index. Just add or remove essay folders, and the index updates itself automatically.
+
+### Viewing the Action
+You can see the automation in action:
+1. Go to your repository on GitHub
+2. Click the "Actions" tab
+3. You'll see the "Update Index" workflow running after each push
+
+The workflow file is located at `.github/workflows/update-index.yml` if you want to see how it works under the hood.
 
 ## ❓ FAQ
 
@@ -134,6 +168,12 @@ A: No - this tool only critiques existing essays. You still do all the writing!
 
 **Q: What if I don't have the assignment instructions?**
 A: That's okay! The AI will still provide feedback based on general essay-writing best practices for your grade level.
+
+**Q: How does the automatic index work?**
+A: A GitHub Action (automated script) runs every time you push changes. It scans for critique files and regenerates index.html automatically. See the "How the Auto-Index Works" section above for details.
+
+**Q: Can I disable the automatic index?**
+A: Yes! Just delete or disable the `.github/workflows/update-index.yml` file. The manual index.html will remain.
 
 ## 🔗 Related Files
 

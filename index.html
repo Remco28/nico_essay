@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essay Critique Tool - Index</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        .intro {
+            background-color: #e7f3ff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .folder-section {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .folder-section h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .critique-list {
+            list-style: none;
+            padding: 0;
+        }
+        .critique-item {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: box-shadow 0.2s;
+        }
+        .critique-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .critique-item a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .critique-item a:hover {
+            color: #3498db;
+        }
+        .critique-meta {
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        .grade {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .grade.b-plus, .grade.b {
+            background-color: #17a2b8;
+        }
+        .grade.c, .grade.d, .grade.f {
+            background-color: #ffc107;
+        }
+        .resources {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 30px 0;
+        }
+        .resources h3 {
+            margin-top: 0;
+            color: #155724;
+        }
+        .resources ul {
+            margin: 10px 0;
+        }
+        .resources a {
+            color: #155724;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .resources a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Essay Critique Tool</h1>
+
+        <div class="intro">
+            <p>
+                <strong>Welcome to the Essay Critique Tool!</strong> This automated system helps students
+                improve their writing through AI-powered, teacher-style feedback.
+            </p>
+            <p>
+                Browse the critiques below, or check out the resources section to learn how to
+                create your own essay critiques.
+            </p>
+        </div>
+
+        <div class="resources">
+            <h3>📚 Resources</h3>
+            <ul>
+                <li><a href="README.md">📖 User Guide</a> - How to use this tool</li>
+                <li><a href="agent_instructions.md">🤖 Agent Instructions</a> - For AI assistants</li>
+                <li><a href="template_reference.html">🎨 Template Reference</a> - HTML/CSS guide</li>
+            </ul>
+        </div>
+
+        <h2>📋 Essay Critiques</h2>
+
+        <div class="folder-section">
+            <h3>📁 Example</h3>
+            <ul class="critique-list">
+
+                <li class="critique-item">
+                    <a href="example/essay1_critique.html">Perseverance and the American Dream in <em>A Raisin in the Sun</em></a>
+                    <div class="critique-meta">
+                        <span class="grade b-plus">B+</span> • Last updated: 2025-11-21 • 8th Grade
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p>
+                This index is automatically updated by GitHub Actions whenever critiques are added or removed.
+            </p>
+            <p>
+                Last generated: Initial manual version (will auto-update on next push)
+            </p>
+        </div>
+    </div>
+</body>
+</html>

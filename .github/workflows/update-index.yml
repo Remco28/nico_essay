@@ -1,0 +1,372 @@
+# GitHub Action: Auto-generate index.html
+# This workflow automatically updates the index.html file whenever critique files are added or removed
+
+name: Update Index
+
+# When to run this action
+on:
+  push:
+    branches:
+      - main  # Run on every push to main branch
+  workflow_dispatch:  # Also allow manual triggering from GitHub UI
+
+# Define the job
+jobs:
+  update-index:
+    runs-on: ubuntu-latest  # Use GitHub's Ubuntu server
+
+    # Required permissions to commit back to repo
+    permissions:
+      contents: write
+
+    steps:
+      # Step 1: Download the repo code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Get full history
+
+      # Step 2: Set up Python (we'll use it to generate the HTML)
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # Step 3: Run our script to generate index.html
+      - name: Generate index.html
+        run: |
+          python3 << 'EOF'
+          import os
+          import re
+          from pathlib import Path
+          from datetime import datetime
+
+          def find_critique_files():
+              """Find all *_critique.html files in the repo."""
+              critique_files = []
+              for root, dirs, files in os.walk('.'):
+                  # Skip hidden directories and common non-essay directories
+                  dirs[:] = [d for d in dirs if not d.startswith('.') and d not in ['node_modules', 'vendor']]
+
+                  for file in files:
+                      if file.endswith('_critique.html'):
+                          file_path = os.path.join(root, file)
+                          critique_files.append(file_path)
+
+              return sorted(critique_files)
+
+          def extract_title_from_html(file_path):
+              """Try to extract the essay title from the HTML."""
+              try:
+                  with open(file_path, 'r', encoding='utf-8') as f:
+                      content = f.read()
+                      # Look for <h1>Essay Critique: TITLE</h1>
+                      match = re.search(r'<h1>Essay Critique:\s*(.+?)</h1>', content)
+                      if match:
+                          return match.group(1).strip()
+                      # Fallback to <title> tag
+                      match = re.search(r'<title>(.+?)</title>', content)
+                      if match:
+                          title = match.group(1).strip()
+                          # Remove "Essay Critique - " prefix if present
+                          return title.replace('Essay Critique - ', '')
+              except:
+                  pass
+              return None
+
+          def extract_grade_from_html(file_path):
+              """Try to extract overall grade from the HTML."""
+              try:
+                  with open(file_path, 'r', encoding='utf-8') as f:
+                      content = f.read()
+                      # Look for Overall Grade line
+                      match = re.search(r'<strong>Overall Grade:</strong>\s*([A-F][+-]?)', content)
+                      if match:
+                          return match.group(1)
+              except:
+                  pass
+              return None
+
+          def get_file_modified_date(file_path):
+              """Get the last modified date of the file."""
+              try:
+                  timestamp = os.path.getmtime(file_path)
+                  return datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d')
+              except:
+                  return 'Unknown'
+
+          def organize_by_folder(critique_files):
+              """Organize critique files by their parent folder."""
+              organized = {}
+              for file_path in critique_files:
+                  folder = os.path.dirname(file_path)
+                  if folder == '.':
+                      folder = 'root'
+                  else:
+                      folder = folder.lstrip('./')
+
+                  if folder not in organized:
+                      organized[folder] = []
+
+                  # Get metadata
+                  filename = os.path.basename(file_path)
+                  essay_name = filename.replace('_critique.html', '')
+                  title = extract_title_from_html(file_path)
+                  grade = extract_grade_from_html(file_path)
+                  date = get_file_modified_date(file_path)
+
+                  organized[folder].append({
+                      'path': file_path,
+                      'filename': filename,
+                      'essay_name': essay_name,
+                      'title': title or essay_name,
+                      'grade': grade,
+                      'date': date
+                  })
+
+              return organized
+
+          def generate_index_html(organized_files):
+              """Generate the index.html content."""
+              html = '''<!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Essay Critique Tool - Index</title>
+              <style>
+                  body {
+                      font-family: 'Georgia', serif;
+                      line-height: 1.6;
+                      max-width: 1000px;
+                      margin: 40px auto;
+                      padding: 20px;
+                      background-color: #f9f9f9;
+                      color: #333;
+                  }
+                  .container {
+                      background-color: white;
+                      padding: 40px;
+                      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                      border-radius: 5px;
+                  }
+                  h1 {
+                      color: #2c3e50;
+                      border-bottom: 3px solid #3498db;
+                      padding-bottom: 10px;
+                  }
+                  h2 {
+                      color: #2c3e50;
+                      margin-top: 30px;
+                      border-left: 4px solid #3498db;
+                      padding-left: 10px;
+                  }
+                  .intro {
+                      background-color: #e7f3ff;
+                      border-left: 4px solid #3498db;
+                      padding: 15px;
+                      margin: 20px 0;
+                  }
+                  .folder-section {
+                      margin: 30px 0;
+                      padding: 20px;
+                      background-color: #f8f9fa;
+                      border-radius: 5px;
+                  }
+                  .folder-section h3 {
+                      color: #2c3e50;
+                      margin-top: 0;
+                  }
+                  .critique-list {
+                      list-style: none;
+                      padding: 0;
+                  }
+                  .critique-item {
+                      background-color: white;
+                      border: 1px solid #dee2e6;
+                      border-radius: 5px;
+                      padding: 15px;
+                      margin: 10px 0;
+                      transition: box-shadow 0.2s;
+                  }
+                  .critique-item:hover {
+                      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                  }
+                  .critique-item a {
+                      text-decoration: none;
+                      color: #2c3e50;
+                      font-weight: bold;
+                      font-size: 1.1em;
+                  }
+                  .critique-item a:hover {
+                      color: #3498db;
+                  }
+                  .critique-meta {
+                      color: #6c757d;
+                      font-size: 0.9em;
+                      margin-top: 5px;
+                  }
+                  .grade {
+                      display: inline-block;
+                      background-color: #28a745;
+                      color: white;
+                      padding: 2px 8px;
+                      border-radius: 3px;
+                      font-weight: bold;
+                      font-size: 0.9em;
+                  }
+                  .grade.b-plus, .grade.b {
+                      background-color: #17a2b8;
+                  }
+                  .grade.c, .grade.d, .grade.f {
+                      background-color: #ffc107;
+                  }
+                  .resources {
+                      background-color: #d4edda;
+                      border-left: 4px solid #28a745;
+                      padding: 15px;
+                      margin: 30px 0;
+                  }
+                  .resources h3 {
+                      margin-top: 0;
+                      color: #155724;
+                  }
+                  .resources ul {
+                      margin: 10px 0;
+                  }
+                  .resources a {
+                      color: #155724;
+                      text-decoration: none;
+                      font-weight: bold;
+                  }
+                  .resources a:hover {
+                      text-decoration: underline;
+                  }
+                  .footer {
+                      text-align: center;
+                      margin-top: 40px;
+                      padding-top: 20px;
+                      border-top: 1px solid #dee2e6;
+                      color: #6c757d;
+                      font-size: 0.9em;
+                  }
+                  .empty-state {
+                      text-align: center;
+                      padding: 40px;
+                      color: #6c757d;
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1>📝 Essay Critique Tool</h1>
+
+                  <div class="intro">
+                      <p>
+                          <strong>Welcome to the Essay Critique Tool!</strong> This automated system helps students
+                          improve their writing through AI-powered, teacher-style feedback.
+                      </p>
+                      <p>
+                          Browse the critiques below, or check out the resources section to learn how to
+                          create your own essay critiques.
+                      </p>
+                  </div>
+
+                  <div class="resources">
+                      <h3>📚 Resources</h3>
+                      <ul>
+                          <li><a href="README.md">📖 User Guide</a> - How to use this tool</li>
+                          <li><a href="agent_instructions.md">🤖 Agent Instructions</a> - For AI assistants</li>
+                          <li><a href="template_reference.html">🎨 Template Reference</a> - HTML/CSS guide</li>
+                      </ul>
+                  </div>
+
+                  <h2>📋 Essay Critiques</h2>
+          '''
+
+              if not organized_files:
+                  html += '''
+                  <div class="empty-state">
+                      <p>No essay critiques found yet.</p>
+                      <p>Follow the instructions in the README to create your first critique!</p>
+                  </div>
+          '''
+              else:
+                  for folder, files in sorted(organized_files.items()):
+                      folder_display = folder.replace('_', ' ').replace('-', ' ').title()
+                      html += f'''
+                  <div class="folder-section">
+                      <h3>📁 {folder_display}</h3>
+                      <ul class="critique-list">
+          '''
+                      for file_info in files:
+                          grade_html = ''
+                          if file_info['grade']:
+                              grade_class = file_info['grade'].lower().replace('+', '-plus').replace('-', '-minus')
+                              grade_html = f'<span class="grade {grade_class}">{file_info["grade"]}</span> '
+
+                          html += f'''
+                          <li class="critique-item">
+                              <a href="{file_info['path']}">{file_info['title']}</a>
+                              <div class="critique-meta">
+                                  {grade_html}• Last updated: {file_info['date']}
+                              </div>
+                          </li>
+          '''
+                      html += '''
+                      </ul>
+                  </div>
+          '''
+
+              html += '''
+                  <div class="footer">
+                      <p>
+                          This index is automatically updated by GitHub Actions whenever critiques are added or removed.
+                      </p>
+                      <p>
+                          Last generated: ''' + datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC') + '''
+                      </p>
+                  </div>
+              </div>
+          </body>
+          </html>
+          '''
+              return html
+
+          # Main execution
+          print("🔍 Scanning for critique files...")
+          critique_files = find_critique_files()
+          print(f"   Found {len(critique_files)} critique file(s)")
+
+          print("📁 Organizing by folder...")
+          organized = organize_by_folder(critique_files)
+
+          print("📝 Generating index.html...")
+          html_content = generate_index_html(organized)
+
+          print("💾 Writing index.html...")
+          with open('index.html', 'w', encoding='utf-8') as f:
+              f.write(html_content)
+
+          print("✅ Index generated successfully!")
+          EOF
+
+      # Step 4: Check if index.html was changed
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet index.html; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      # Step 5: Commit and push if there are changes
+      - name: Commit and push if changed
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add index.html
+          git commit -m "Auto-update index.html [skip ci]"
+          git push
